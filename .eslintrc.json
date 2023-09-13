@@ -1,0 +1,101 @@
+{
+    "env": {
+        "es2020": true,
+        "node": true
+    },
+    "extends": [
+        "airbnb-base",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "tsconfig.json"
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "prettier"
+    ],
+    "rules": {
+        "no-underscore-dangle": "off",
+        "class-methods-use-this": "off",
+        "no-loop-func": "off",
+        "camelcase": "warn",
+        "no-console": "off",
+        "prettier/prettier": [
+            "error",
+            {
+                "endOfLine": "auto"
+            }
+        ],
+        "func-names": "off",
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+        "import/prefer-default-export": "off",
+        "no-use-before-define": [
+            "error",
+            {
+                "functions": true,
+                "classes": true
+            }
+        ],
+        "@typescript-eslint/no-explicit-any": "off",
+        "no-param-reassign": [
+            2,
+            {
+                "props": false
+            }
+        ],
+        "prefer-destructuring": [
+            "error",
+            {
+                "object": true,
+                "array": false
+            }
+        ],
+        "no-plusplus": [
+            "error",
+            {
+                "allowForLoopAfterthoughts": true
+            }
+        ],
+        "no-prototype-builtins": "off",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": [
+            "error"
+        ],
+        "curly": [
+            "error",
+            "all"
+        ],
+        "no-trailing-spaces": "error",
+        "sonarjs/max-switch-cases": "off",
+        "sonarjs/no-small-switch": "off",
+        "no-nonoctal-decimal-escape": "off",
+        "import/no-import-module-exports": "off",
+        "import/no-relative-packages": "off",
+        "no-unsafe-optional-chaining": "off"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx",
+                    ".d.ts"
+                ]
+            }
+        }
+    }
+}
