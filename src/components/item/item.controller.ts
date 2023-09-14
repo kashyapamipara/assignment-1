@@ -117,7 +117,7 @@ class ItemController {
             const page = parseInt(req.query.page as string, 10) || 1;
             const limit = parseInt(req.query.limit as string, 10) || 10;
             const sort = { createdAt: 'desc' };
-            const query: Record<string, any> = { isArchived: false };
+            const query: Record<string, any> = {} ;
             const options = {
                 page,
                 limit,
@@ -130,7 +130,7 @@ class ItemController {
                     query[`${type}.name`] = { $regex: searchParam, $options: 'i' };
                 }
             }
-
+            
             const itemList = await itemWithPagination(query, options);
             const response = SuccessResponse.apiSuccess({
                 code: successCommonCode.FETCHED_SUCCESSFULLY,

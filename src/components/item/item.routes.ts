@@ -23,7 +23,7 @@ itemRoute.delete(`/:itemId`, validator(ReqProperty.PARAMS, ItemReqParamDTO), ite
 /**
  * get all item list
  */
-itemRoute.get('/getList/:type', itemController.getAllItem);
+itemRoute.get('/getList', itemController.getAllItem);
 
 itemRoute.get('/', itemController.getItems);
 
