@@ -36,8 +36,7 @@ npm-debug.log
 #Visual studio file
 .vscode/
 
-#Environment files
-.env
+
 
 #media
 media
