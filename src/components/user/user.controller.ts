@@ -18,11 +18,13 @@ class UserController {
      */
     public async signupUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            console.log('******');
             const userObject = req.body;
+            console.log('******', userObject);
             const user = await createUser(userObject);
             log.info('user created successfully');
-            const response = SuccessResponse.apiSuccess({
-                code: successCommonCode.CREATED_SUCCESSFULLY,
+           const response = SuccessResponse.apiSuccess({
+                 code: successCommonCode.CREATED_SUCCESSFULLY,
                 data: user,
                 description: 'user signup Successfully',
             });
@@ -39,39 +41,39 @@ class UserController {
      * @param res
      * @param next
      */
-    public async login(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const { email, password } = <IUserDocument>req.body;
+    // public async login(req: Request, res: Response, next: NextFunction): Promise<void> {
+    //     try {
+    //         const { email, password } = <IUserDocument>req.body;
 
-            const user = await User.findByCredentials(email, password);
+    //         const user = await User.findByCredentials(email, password);
 
-            if (!user) {
-                throw new HttpException({
-                    errorType: ERROR_CONST.BAD_REQUEST,
-                    exceptionCode: USER_ERROR_CODES.SIGN_IN_FAIL,
-                    description: 'SIGN_IN_FAIL',
-                    moduleName: MODULE_NAME_FOR_LOG,
-                });
-            }
+    //         if (!user) {
+    //             throw new HttpException({
+    //                 errorType: ERROR_CONST.BAD_REQUEST,
+    //                 exceptionCode: USER_ERROR_CODES.SIGN_IN_FAIL,
+    //                 description: 'SIGN_IN_FAIL',
+    //                 moduleName: MODULE_NAME_FOR_LOG,
+    //             });
+    //         }
 
-            /*
-             * Generate new token on every login  */
-            const userToken = await user.getAuthToken();
-            const response = SuccessResponse.apiSuccess({
-                code: 'USER_LOGIN_SUCCESSFULLY',
-                data: {
-                    token: userToken,
-                    _id: userToken._id,
-                    name: userToken.name,
-                    email: userToken.email,
-                },
-                description: 'user signup Successfully',
-            });
-            res.status(response.statusCode).json(response);
-        } catch (err) {
-            next(err);
-        }
-    }
+    //         /*
+    //          * Generate new token on every login  */
+    //         const userToken = await user.getAuthToken();
+    //         const response = SuccessResponse.apiSuccess({
+    //             code: 'USER_LOGIN_SUCCESSFULLY',
+    //             data: {
+    //                 token: userToken,
+    //                 _id: userToken._id,
+    //                 name: userToken.name,
+    //                 email: userToken.email,
+    //             },
+    //             description: 'user signup Successfully',
+    //         });
+    //         res.status(response.statusCode).json(response);
+    //     } catch (err) {
+    //         next(err);
+    //     }
+    // }
 
     /**
      * Post - /user/logout/
@@ -89,15 +91,7 @@ class UserController {
             const user = req.user as IUser;
             /*
              * Removes token on every logout  */
-            await user.removeToken(token).catch(err => {
-                throw new HttpException({
-                    errorType: ERROR_CONST.DATABASE_ERROR,
-                    exceptionCode: 'ERROR_ON_FINDING_TOKEN',
-                    description: 'Cannot find the matching token',
-                    err,
-                    moduleName: MODULE_NAME_FOR_LOG,
-                });
-            });
+        
 
             await req.user.save();
             const response = SuccessResponse.apiSuccess({

@@ -9,7 +9,6 @@ import path from 'path';
 import { IUser } from './components/user/user.model';
 import { Config } from './config';
 import { ApplicationConfig } from './config/application.config';
-import { errorMiddleware } from './middleware/error.middleware';
 import { customLogger, getLogger } from './services/logger';
 
 declare global {
@@ -42,13 +41,11 @@ export class App {
         }
         this.config();
         this.mongoSetup();
-        this.initializeErrorHandling();
+    
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    initializeErrorHandling() {
-        this.app.use(errorMiddleware);
-    }
+  
 
     private config(): void {
         this.app.use(compression());
@@ -105,7 +102,7 @@ export class App {
             autoIndex: true,
         };
         try {
-            mongoose.connect(mongoUrl, dbOptions);
+             mongoose.connect(mongoUrl, dbOptions);
         } catch (err) {
             log.fatal({ Error: err }, `DATABASE - Error`);
         }

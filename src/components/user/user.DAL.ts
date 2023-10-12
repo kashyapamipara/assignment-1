@@ -1,5 +1,6 @@
 import { getLogger } from '../../services/logger';
 import HttpException, { ERROR_CONST } from '../../utils/error-utils';
+import Posts, { IPost, IPostDocument } from './posts.model';
 import { USER_ERROR_CODES } from './user.errors';
 import User, { IUser, IUserDocument } from './user.model';
 
@@ -31,6 +32,52 @@ export const createUser = async (userObject: IUserDocument): Promise<IUser | nev
     }
 };
 
+
+export const createPost = async (userObject: IPostDocument): Promise<IPost | never> => {
+    try {
+        return await Posts.create(userObject);
+    } catch (err) {
+        if (err.code === 11000 && err.errmsg.includes('username')) {
+            throw new HttpException({
+                errorType: ERROR_CONST.BAD_REQUEST,
+                exceptionCode: 'EMAIL_ALREADY_EXIST',
+                description: USER_ERROR_CODES.EMAIL_ALREADY_EXIST,
+                err,
+                moduleName: MODULE_NAME_FOR_LOG
+            });
+        }
+        throw new HttpException({
+            errorType: ERROR_CONST.DATABASE_ERROR,
+            exceptionCode: 'CREATE_USER_IN_DB',
+            description: USER_ERROR_CODES.CREATE_USER_IN_DB,
+            err,
+            moduleName: MODULE_NAME_FOR_LOG
+        });
+    }
+};
+
+export const getPostByUserId = async (userObject) => {
+    try {
+        return await Posts.find(userObject);
+    } catch (err) {
+        if (err.code === 11000 && err.errmsg.includes('username')) {
+            throw new HttpException({
+                errorType: ERROR_CONST.BAD_REQUEST,
+                exceptionCode: 'EMAIL_ALREADY_EXIST',
+                description: USER_ERROR_CODES.EMAIL_ALREADY_EXIST,
+                err,
+                moduleName: MODULE_NAME_FOR_LOG
+            });
+        }
+        throw new HttpException({
+            errorType: ERROR_CONST.DATABASE_ERROR,
+            exceptionCode: 'CREATE_USER_IN_DB',
+            description: USER_ERROR_CODES.CREATE_USER_IN_DB,
+            err,
+            moduleName: MODULE_NAME_FOR_LOG
+        });
+    }
+};
 export const pullAuthTokenFromUser = async (userId, tokenToPull): Promise<IUser> => {
     try {
         return await User.findByIdAndUpdate(userId, {

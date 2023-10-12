@@ -1,6 +1,4 @@
 import { Router } from 'express';
-import { authenticate } from '../../middleware/authentication.middleware';
-import { ReqProperty, validator } from '../../middleware/validator.middleware';
 import userController from './user.controller';
 import { AddUserBodyDTO, UserLoginBodyDTO } from './user.dto';
 
@@ -9,16 +7,16 @@ export const userRoute = Router({ strict: false });
 /**
  * to sign up new admin
  */
-userRoute.post(`/`, validator(ReqProperty.BODY, AddUserBodyDTO), userController.signupUser);
+userRoute.post(`/`, userController.signupUser);
 
 /**
  * to login admin
  */
-userRoute.post(`/login`, validator(ReqProperty.BODY, UserLoginBodyDTO), userController.login);
+
 
 /**
  * to logout admin
  */
-userRoute.post(`/logout`, authenticate.middleWare, userController.logoutAdmin);
+userRoute.post(`/logout`, userController.logoutAdmin);
 
 export default userRoute;
