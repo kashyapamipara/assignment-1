@@ -1,6 +1,6 @@
 import { Application } from 'express';
 import userRoute from '../components/user/user.routes';
-import { createPost, createUser, getPostByUserId } from '../components/user/user.DAL';
+import { createFollower, createPost, createUser, getAllFollowers, getAllUser, getPostByUserId, getUser } from '../components/user/user.DAL';
 
 export class ApplicationConfig {
     public static registerRoute(app: Application) {
@@ -12,16 +12,7 @@ export class ApplicationConfig {
             delete arg1._id;
             const user = await createUser(arg1);
 
-            // run some business logic
-
-            /*
-            // In case of errors:
-            return res.status(400).json({
-              message: "error happened"
-            })
-            */
-
-            // success
+        
             return res.json({
                 _id: '<value>',
                 email: '<value>',
@@ -42,12 +33,6 @@ export class ApplicationConfig {
             delete arg1._id;
             const user = await createPost(arg1);
 
-            /*
-            // In case of errors:
-            return res.status(400).json({
-              message: "error happened"
-            })
-            */
 
             // success
             return res.json({
@@ -59,35 +44,79 @@ export class ApplicationConfig {
         });
         app.post('/getPostsByUser', async (req, res) => {
             // get request input
-            const { arg1 } = req.body.input;
+            const { input } = req.body.input;
             console.log('**********');
             // run some business logic
-            const posts = await getPostByUserId(arg1);
-            /*
-            // In case of errors:
-            return res.status(400).json({
-              message: "error happened"
-            })
-            */
-
-            // success
-            var ans = [];
-            for (let i = 0; i < posts.length; i++) {
-                ans.push({
-                    user_id: posts[i].user_id,
-                    text: posts[i].text,
-                    created_at: posts[i].created_at,
-                    image_url: posts[i].image_url,
-                });
-            }
-            console.log(posts);
-            console.log('*******', ans);
-            return res.json({
-                "user_id": posts[0].user_id,
-                "text": posts[0].text,
-                "created_at": posts[0].created_at,
-                "image_url": posts[0].image_url,
-            });
+            const posts = await getPostByUserId();
+        
+            
+            const mappedPosts = posts.map(post => ({
+                user_id: post.user_id,
+                text: post.text,
+                created_at: post.created_at,
+                image_url: post.image_url,
+              }));
+            console.log(mappedPosts);
+            // console.log('*******', ans);
+            return res.json(
+                mappedPosts
+            );
         });
+
+    
+
+
+        app.post('/getUserById', async (req, res) => {
+
+            // get request input
+            
+          console.log('^^^^^^^^^^^^^^^^^^^^^^^');
+            // run some business logic
+            const { arg1 } = req.body.input;
+            delete arg1._id;
+            console.log('____',arg1);
+            const user = await getUser(arg1);
+          console.log(user);
+          
+            // success
+            return res.json(user)
+          
+          });
+          app.post('/postFollower', async (req, res) => {
+
+            // get request input
+            const { arg1 } = req.body.input;
+          
+            // run some business logic
+            console.log('^^^^^^^^^^^^^^^^^^^^^^^');
+            // run some business logic
+          
+            delete arg1._id;
+            console.log('____',arg1);
+            const user = await createFollower(arg1);
+            return res.json({
+              user_id: "<value>"
+            })
+          
+          });
+
+          app.post('/getAllUsers', async (req, res) => {
+console.log('^^^^^^^^^');
+            const user = await getAllUser();
+          console.log('sfsdfdfdgdfgdfgfg',user);
+            // success
+            return res.json(user)
+          
+          });
+
+          app.post('/getAllFollowers', async (req, res) => {
+            console.log('^^^^^^^^^');
+            const { arg1 } = req.body.input;
+                        const user = await getAllFollowers({'user_id':arg1.user_id});
+                      console.log('sfsdfdfdgdfgdfgfg',user);
+                        // success
+                        return res.json(user)
+                      
+                      });
     }
 }
